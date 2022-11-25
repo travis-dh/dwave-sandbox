@@ -54,7 +54,7 @@ def dwave_sampler(h, J, offset, num_reads=5000, label='models.py'):
 if __name__ == '__main__':
     # Simlated Annealing with output saved to file.
     neal_sample_set = sim_anneal(h, J)
-    print(neal_sample_set, file=open('neal_output.txt' 'w'))
+    print(neal_sample_set, file=open('neal_output.txt', 'w'))
 
     # D-Wave next. Time is used once `dwave_sampler` is called.
     # Also save output to file.
