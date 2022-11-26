@@ -1,7 +1,7 @@
 # dwave-sandbox: A place for toying with D-Wave samplers.
 A repository is required for a developer to continue getting their free monthly minute to submit requests to D-Wave. The repository here thus serves as a sandbox.
 
-Inside is a Python script `models.py` which has several simple Ising models to be solved using the [D-Wave OCEAN SDK](https://docs.ocean.dwavesys.com/en/stable/index.html).
+Inside is a Python script `models.py` which has several simple Ising models to be solved using the [D-Wave Ocean SDK](https://docs.ocean.dwavesys.com/en/stable/index.html).
 
 ### The Ising models
 There are a total of ten Ising models defined in `models.py`. Each Ising model has three nodes, with both coupling strengths $J_{ij}=1$. The external magnetic field contributions, however, depend on the trial $i$, $i \in [1, 10]$ such that each node shares 

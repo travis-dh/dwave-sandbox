@@ -53,7 +53,7 @@ def dwave_sampler(h, J, offset, num_reads=5000, label='models.py'):
     :param J: Coupling strength(s).
     :param offset: An energy term which serves as a constant.
     :param num_reads: The number of samples taken.
-    :returns: A structured type which constains data of 
+    :returns: A structured type which contains data of 
               the sampler's response.
     '''
     bqm = dimod.BinaryQuadraticModel(h, J, offset, 'SPIN')
