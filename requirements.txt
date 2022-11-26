@@ -1,3 +1,4 @@
 dimod==0.11.6
 dwave_neal==0.5.9
 dwave_preprocessing==0.4.0
+numpy==1.21.5
