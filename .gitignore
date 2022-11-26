@@ -131,3 +131,4 @@ dmypy.json
 # Output files
 dwave_output.txt
 neal_output.txt
+/output

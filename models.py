@@ -7,14 +7,26 @@
 # @date 25 Nov 2022
 # ----------------------------------------------------------------------
 
+import os
 import dimod
 import neal
+import numpy as np
 from dwave.system import DWaveSampler, EmbeddingComposite
 
 # Define the system.
-h = {0: 0, 1: 0, 2: 0}
 J = {(0, 1): 1, (1, 2): 1}
 offset = 0.0
+
+# Hard-coded values to test "near zero" case
+h_vals = [0, 10**(-18), 10**(-16), 10**(-14), 10**(-12),
+          10**(-9), 10**(-6), 10**(-5), 10**(-4), 2*10**(-3)]
+
+# This list will keep `dict`-type entries to help with 
+# instantiating Binary Quadratic Models
+h = []
+
+for val in h_vals:
+    h.append({key: val for key in np.arange(3)})
 
 def sim_anneal(h, J, num_reads=10):
     '''
@@ -52,11 +64,25 @@ def dwave_sampler(h, J, offset, num_reads=5000, label='models.py'):
     return sampleset
 
 if __name__ == '__main__':
-    # Simlated Annealing with output saved to file.
-    neal_sample_set = sim_anneal(h, J)
-    print(neal_sample_set, file=open('neal_output.txt', 'w'))
+    # Remove old files
+    path = os.getcwd() + '/output/'
+    [os.remove(os.path.join(path, f)) for f in os.listdir(path) if f.endswith('.csv')]
 
-    # D-Wave next. Time is used once `dwave_sampler` is called.
-    # Also save output to file.
-    dwave_sample_set = dwave_sampler(h, J, offset)
-    print(dwave_sample_set, file=open('dwave_output.txt', 'w'))
+    '''
+    Samples are taken here. Each entry in `h` is in a `dict` format
+    which is passable to a dimod/D-Wave sampler: an entry in
+    `h`, called `val`, has the Ising Model nodes as its keys and the
+    external magnetic field contributions as key values (see `h_vals`
+    above for the values each node will share at a given iteration).
+    '''
+    for i, val in enumerate(h):
+        # Simulated annealing -> to df -> to .csv
+        neal_sample_set = sim_anneal(val, J)
+        df = neal_sample_set.to_pandas_dataframe()
+        df.to_csv(f'{path}/neal_output_{i+1}.csv')
+
+        # D-Wave sampler -> to df -> to .csv
+        # TIME WILL BE USED HERE FOR A WHOLE BATCH!
+        dwave_sample_set = dwave_sampler(val, J, offset, label=f'models_CALL_{i+1}.py')
+        fd = dwave_sample_set.to_pandas_dataframe()
+        fd.to_csv(f'{path}/dwave_output_{i+1}.csv')
